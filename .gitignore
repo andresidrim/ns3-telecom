@@ -1,0 +1,91 @@
+# ============================================
+# NS-3 (CMake) Build Artifacts
+# ============================================
+/build/
+/cmake-cache/
+/ns3/
+/ns3-core/
+/ns3-net/
+/ns3-apps/
+/ns3-internet/
+/ns3-wifi/
+/ns3-lr-wpan/
+/ns3-spectrum/
+*.cmake
+CMakeFiles/
+CMakeCache.txt
+Makefile
+compile_commands.json
+
+# Logs and temporary files
+*.log
+*.pcap
+*.xml
+*.tr
+*.trace
+*.stat
+*.txt~
+*.tmp
+*.bak
+
+# Simulation output
+*.csv
+*.dat
+*.out
+*.json
+*.plt
+results/
+output/
+data/
+
+# Python virtual envs (Caso use scripts externos)
+/venv/
+/env/
+/.venv/
+
+# ============================================
+# Editor-specific junk
+# ============================================
+
+# VSCode
+.vscode/
+.vscode-test/
+
+# Neovim / Vim / nvim-lsp
+*.swp
+*.swo
+*.swx
+.nvimlog
+.lsp.log
+
+# clangd
+.cache/
+clangd/
+.cache/clangd/
+
+# JetBrains / CLion
+.idea/
+*.iml/
+
+# ============================================
+# System / OS junk
+# ============================================
+.DS_Store
+Thumbs.db
+
+# ============================================
+# Binaries
+# ============================================
+*.o
+*.so
+*.a
+*.dylib
+*.dll
+*.exe
+
+# ============================================
+# Python bytecode (caso tenha scripts de análise)
+# ============================================
+__pycache__/
+*.pyc
+

@@ -1,0 +1,7 @@
+CompileFlags:
+  Add:
+    - -I/home/andre/ns3/ns-3.46.1/build
+    - -I/home/andre/ns3/ns-3.46.1/build/ns3
+    - -I/home/andre/ns3/ns-3.46.1/build/include
+    - -I/home/andre/ns3/ns-3.46.1
+    - -std=gnu++20
