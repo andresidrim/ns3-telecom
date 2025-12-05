@@ -10,7 +10,6 @@ def load_results():
         for r in reader:
             r["txPower_dBm"] = float(r["txPower_dBm"])
             r["packetInterval_ms"] = float(r["packetInterval_ms"])
-            r["simTime_s"] = float(r["simTime_s"])
             r["sentPkts"] = int(r["sentPkts"])
             r["recvPkts"] = int(r["recvPkts"])
             r["pdr"] = float(r["pdr"])
@@ -19,51 +18,67 @@ def load_results():
             results.append(r)
     return results
 
-def plot_param(results, xKey, titlePrefix=""):
-    results = sorted(results, key=lambda r: r[xKey])
 
-    x = [r[xKey] for r in results]
-    pdr = [r["pdr"] * 100 for r in results]
-    delay = [r["avgDelay_s"] for r in results]
-    thr = [r["throughput_bps"] / 1e3 for r in results]
-
+def plot_metric(x, y, xlabel, ylabel, title):
     plt.figure()
-    plt.plot(x, pdr, marker='o')
-    plt.xlabel(xKey)
-    plt.ylabel("PDR (%)")
-    plt.title(f"{titlePrefix} PDR vs {xKey}")
+    plt.plot(x, y, marker='o')
+    plt.xlabel(xlabel)
+    plt.ylabel(ylabel)
+    plt.title(title)
     plt.grid(True)
     plt.show()
 
-    plt.figure()
-    plt.plot(x, delay, marker='o')
-    plt.xlabel(xKey)
-    plt.ylabel("Delay (s)")
-    plt.title(f"{titlePrefix} Delay vs {xKey}")
-    plt.grid(True)
-    plt.show()
 
-    plt.figure()
-    plt.plot(x, thr, marker='o')
-    plt.xlabel(xKey)
-    plt.ylabel("Throughput (kbps)")
-    plt.title(f"{titlePrefix} Throughput vs {xKey}")
-    plt.grid(True)
-    plt.show()
+def plot_txpower(results, intervalo_fixo):
+    subset = [r for r in results if r["packetInterval_ms"] == intervalo_fixo]
+    subset = sorted(subset, key=lambda r: r["txPower_dBm"])
+
+    x = [r["txPower_dBm"] for r in subset]
+
+    plot_metric(x, [r["pdr"] * 100 for r in subset],
+                "TxPower (dBm)", "PDR (%)",
+                "PDR vs TxPower")
+
+    plot_metric(x, [r["avgDelay_s"] for r in subset],
+                "TxPower (dBm)", "Delay (s)",
+                "Delay vs TxPower")
+
+    plot_metric(x, [r["throughput_bps"] / 1e3 for r in subset],
+                "TxPower (dBm)", "Throughput (kbps)",
+                "Throughput vs TxPower")
+
+
+def plot_interval(results, tx_fixo):
+    subset = [r for r in results if r["txPower_dBm"] == tx_fixo]
+    subset = sorted(subset, key=lambda r: r["packetInterval_ms"])
+
+    x = [r["packetInterval_ms"] for r in subset]
+
+    plot_metric(x, [r["pdr"] * 100 for r in subset],
+                "Intervalo (ms)", "PDR (%)",
+                "PDR vs Intervalo")
+
+    plot_metric(x, [r["avgDelay_s"] for r in subset],
+                "Intervalo (ms)", "Delay (s)",
+                "Delay vs Intervalo")
+
+    plot_metric(x, [r["throughput_bps"] / 1e3 for r in subset],
+                "Intervalo (ms)", "Throughput (kbps)",
+                "Throughput vs Intervalo")
 
 
 def main():
     results = load_results()
     print(f"Carregadas {len(results)} linhas de {FILENAME}")
 
-    txPower_results = [r for r in results if r["dataMode"] == "HtMcs7" and r["packetInterval_ms"] == 500]
-    plot_param(txPower_results, "txPower_dBm", titlePrefix="[TxPower]")
+    intervalo_fixo = 500
+    tx_fixo = 16
 
-    dataMode_results = [r for r in results if r["txPower_dBm"] == 16 and r["packetInterval_ms"] == 500]
-    plot_param(dataMode_results, "dataMode", titlePrefix="[DataMode]")
+    print("\nGerando gráficos de TxPower...")
+    plot_txpower(results, intervalo_fixo)
 
-    interval_results = [r for r in results if r["txPower_dBm"] == 16 and r["dataMode"] == "HtMcs7"]
-    plot_param(interval_results, "packetInterval_ms", titlePrefix="[Intervalo]")
+    print("\nGerando gráficos de Intervalo...")
+    plot_interval(results, tx_fixo)
 
 
 if __name__ == "__main__":
