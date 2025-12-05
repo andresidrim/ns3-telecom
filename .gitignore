@@ -2,16 +2,6 @@
 # NS-3 (CMake) Build Artifacts
 # ============================================
 /build/
-/cmake-cache/
-/ns3/
-/ns3-core/
-/ns3-net/
-/ns3-apps/
-/ns3-internet/
-/ns3-wifi/
-/ns3-lr-wpan/
-/ns3-spectrum/
-*.cmake
 CMakeFiles/
 CMakeCache.txt
 Makefile
